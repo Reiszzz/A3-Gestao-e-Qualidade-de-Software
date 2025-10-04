@@ -1,5 +1,7 @@
 package telas;
 
+import model.Doador;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -293,7 +295,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         else {
             
             // Se o doador puder doar, criar um objeto Doador e inserir os dados no banco de dados
-            Doador doador = new Doador(cpfDoador, String.valueOf(idade), sexo, String.valueOf(peso), nome);
+            Doador doador = new Doador(cpfDoador, idade, sexo, peso, nome);
             try {
                 doadorDAO.adicionarDoador(doador);
                 JOptionPane.showMessageDialog(this, "Cadastro de doador realizado com sucesso!");

@@ -3,6 +3,9 @@ package telas;
  *
  * @author João Vitor
  */
+import config.DataBaseManager;
+import model.Doador;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
