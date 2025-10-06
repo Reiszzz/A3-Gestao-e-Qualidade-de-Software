@@ -14,11 +14,12 @@ public class TelaCadastro extends javax.swing.JFrame {
 
     // ALTERAÇÃO — substitui chamadas diretas por um controller
     private final DoadorController doadorController;
+    private final DoadorService doadorService; // <--- ADICIONE ISSO
     
     public TelaCadastro() {
         initComponents();
         //doadorDAO = new DoadorDAO();
-        //doadorService = new DoadorService();
+        doadorService = new DoadorService();
         this.doadorController = new DoadorController();
 
     }
@@ -272,45 +273,29 @@ public class TelaCadastro extends javax.swing.JFrame {
         String sexo = jTextField3.getText().toUpperCase();
         int idade;
         double peso;
-        
+
         // Verificando se peso e idade são números válidos
         try {
             idade = Integer.parseInt(jTextField8.getText());
             peso = Double.parseDouble(jTextField4.getText());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Idade e peso devem ser números válidos.", "Atenção", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Idade e peso devem ser números válidos.", "Atenção", JOptionPane.WARNING_MESSAGE);
             return;
-            }
+        }
 
-        // Verificando se o doador pode doar
-        if (idade < 16) {
-            JOptionPane.showMessageDialog(null, "O voluntário não pode doar se for menor que 16 anos.", "Atenção", JOptionPane.WARNING_MESSAGE);
-        return;
-        }
-        if (idade > 69) {
-            JOptionPane.showMessageDialog(null, "O voluntário não pode doar se for maior que 69 anos.", "Atenção", JOptionPane.WARNING_MESSAGE);
-        return;
-        }
-        if (peso < 50) {
-            JOptionPane.showMessageDialog(null, "O voluntário não pode doar se pesar menos que 50Kg.", "Atenção", JOptionPane.WARNING_MESSAGE); 
-        return;
-        }        
-        if (cpfDoador.length() != 11) {
-            JOptionPane.showMessageDialog(null, "O CPF deve conter 11 dígitos", "Atenção", JOptionPane.WARNING_MESSAGE); 
-        } 
-        else {
-            
-            // Se o doador puder doar, criar um objeto Doador e inserir os dados no banco de dados
-            Doador doador = new Doador(cpfDoador, idade, sexo, peso, nome);
-            try {
-                //doadorService.cadastrarDoador(doador);
-                doadorController.cadastrarDoador(cpfDoador, idade, sexo, peso, nome);
-                JOptionPane.showMessageDialog(this, "Cadastro de doador realizado com sucesso!");
-                // Limpar os campos após o cadastro
-                limparCampos();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao cadastrar doador: " + ex.getMessage());
-            }
+        try {
+            // Cadastra o doador usando o service (já faz validação)
+            doadorService.cadastrarDoador(cpfDoador, idade, sexo, peso, nome);
+
+            // Se chegou aqui, cadastro foi bem-sucedido
+            JOptionPane.showMessageDialog(this, "Cadastro de doador realizado com sucesso!");
+            limparCampos();
+        } catch (IllegalArgumentException ex) {
+            // Captura erros de validação do service
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Atenção", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            // Captura erros inesperados
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar doador: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
