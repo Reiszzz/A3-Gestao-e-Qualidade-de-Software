@@ -12,7 +12,7 @@ public class DataBaseManager {
     private static String db = "doacao_sangue";
     private static String usuario = "root";
     private static String senha = "Gui260604!";
-    
+
     public static Connection obtemConexao (){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver"); // Registra o driver

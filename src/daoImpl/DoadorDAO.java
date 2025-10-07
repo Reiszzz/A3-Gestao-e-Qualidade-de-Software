@@ -60,7 +60,33 @@ public class DoadorDAO implements DoadorRepository {
 
     @Override
     public Doador buscarPorCpf(String cpf) {
-        return null;
+        // 💡 Ajuste a instrução SQL para selecionar um único registro com base no CPF
+        String sql = "SELECT * FROM doadores WHERE cpfDoador = ?";
+
+        try (Connection connection = DataBaseManager.obtemConexao();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, cpf);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Mapeia o resultado para um objeto Doador
+                    Doador doador = new Doador(
+                            rs.getString("cpfDoador"),
+                            rs.getInt("idade"),
+                            rs.getString("sexo"),
+                            rs.getDouble("peso"),
+                            rs.getString("nome")
+                    );
+                    return doador;
+                }
+            }
+            // Se rs.next() não encontrar nada, o método retorna null (como o teste espera)
+            return null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar doador por CPF: " + e.getMessage(), e);
+        }
     }
 
     @Override

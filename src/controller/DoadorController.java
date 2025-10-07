@@ -6,6 +6,10 @@ import service.DoadorService;
 public class DoadorController {
     private final DoadorService doadorService;
 
+    public DoadorController(DoadorService doadorService) {
+        this.doadorService = doadorService;
+    }
+
     public DoadorController() {
         this.doadorService = new DoadorService();
     }
