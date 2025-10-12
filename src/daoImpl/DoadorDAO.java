@@ -91,13 +91,32 @@ public class DoadorDAO implements DoadorRepository {
 
     @Override
     public void atualizar(Doador doador) {
-
+        String sql = "UPDATE doadores SET idade=?, sexo=?, peso=?, nome=? WHERE cpfDoador=?";
+        try (Connection connection = DataBaseManager.obtemConexao();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, doador.getIdade());
+            stmt.setString(2, doador.getSexo());
+            stmt.setDouble(3, doador.getPeso());
+            stmt.setString(4, doador.getNome());
+            stmt.setString(5, doador.getCpfDoador());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar doador: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public void deletar(String cpf) {
-
+        String sql = "DELETE FROM doadores WHERE cpfDoador = ?";
+        try (Connection connection = DataBaseManager.obtemConexao();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar doador: " + e.getMessage(), e);
+        }
     }
+
 
     // Métodos buscarPorCpf, atualizar e deletar podem ser implementados depois
 }

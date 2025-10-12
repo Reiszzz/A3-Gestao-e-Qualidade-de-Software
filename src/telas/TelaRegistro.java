@@ -5,6 +5,8 @@
  */
 package telas;
 
+import controller.DoadorController;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +17,9 @@ import javax.swing.JOptionPane;
  *
  * @author João Vitor
  */
-public class TelaRegistro extends javax.swing.JFrame {   
+public class TelaRegistro extends javax.swing.JFrame {
+
+
     private DoacaoDAO doacaoDAO;
     private Doacao doacao;
     

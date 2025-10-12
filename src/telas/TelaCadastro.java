@@ -1,6 +1,7 @@
 package telas;
 
 import controller.DoadorController;
+import daoImpl.DoadorDAO;
 import service.DoadorService;
 import model.Doador;
 
@@ -12,16 +13,11 @@ import javax.swing.JOptionPane;
  */
 public class TelaCadastro extends javax.swing.JFrame {
 
-    // ALTERAÇÃO — substitui chamadas diretas por um controller
     private final DoadorController doadorController;
-    private final DoadorService doadorService; // <--- ADICIONE ISSO
-    
-    public TelaCadastro() {
-        initComponents();
-        //doadorDAO = new DoadorDAO();
-        doadorService = new DoadorService();
-        this.doadorController = new DoadorController();
 
+    public TelaCadastro(DoadorController doadorController) {
+        initComponents();
+        this.doadorController = doadorController;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -285,7 +281,7 @@ public class TelaCadastro extends javax.swing.JFrame {
 
         try {
             // Cadastra o doador usando o service (já faz validação)
-            doadorService.cadastrarDoador(cpfDoador, idade, sexo, peso, nome);
+            doadorController.cadastrarDoador(cpfDoador, idade, sexo, peso, nome);
 
             // Se chegou aqui, cadastro foi bem-sucedido
             JOptionPane.showMessageDialog(this, "Cadastro de doador realizado com sucesso!");
@@ -312,7 +308,7 @@ public class TelaCadastro extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        TelaInicial telaInicial = new TelaInicial();
+        TelaInicial telaInicial = new TelaInicial(doadorController);
                 telaInicial.setVisible(true);
                 dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
@@ -330,6 +326,12 @@ public class TelaCadastro extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+
+        // Inicializando MVC
+        DoadorDAO dao = new DoadorDAO();
+        DoadorService service = new DoadorService(dao);
+        DoadorController controller = new DoadorController(service);
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -351,7 +353,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaCadastro().setVisible(true);
+                new TelaCadastro(controller).setVisible(true);
             }
         });
     }

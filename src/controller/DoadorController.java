@@ -10,11 +10,7 @@ public class DoadorController {
         this.doadorService = doadorService;
     }
 
-    public DoadorController() {
-        this.doadorService = new DoadorService();
-    }
-
-    public void cadastrarDoador(String cpf, int idade, String sexo, double peso, String nome) {
+    public void cadastrarDoador(String cpf, int idade, String sexo, double peso, String nome) throws Exception {
         Doador doador = new Doador(cpf, idade, sexo, peso, nome);
         doadorService.cadastrarDoador(doador);
     }
